@@ -240,13 +240,7 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                 ),
-                MaterialButton(
-                  onPressed: () {},
-                  child: const Text(
-                    "Other Cities",
-                    style: TextStyle(color: Colors.white, fontSize: 20),
-                  ),
-                ),
+                const SizedBox(height: 20,)
               ],
             ),
           )),

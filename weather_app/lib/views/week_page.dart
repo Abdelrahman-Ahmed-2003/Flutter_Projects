@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:weather_app/cubites/data_cubit.dart';
 
@@ -8,6 +10,7 @@ class WeekPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
     var cubit = context.read<DataCubit>();
     return BlocConsumer<DataCubit, DataState>(
       listener: (context, state) {},
@@ -129,19 +132,30 @@ class WeekPage extends StatelessWidget {
                           return Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text("${cubit.week[index]}",
-                                    style:
-                                        const TextStyle(color: Colors.white)),
-                                const Image(
-                                    height: 50,
-                                    image: AssetImage("lib/images/sunny.png")),
-                                Text(
-                                  "${cubit.model?.forecast!.forecastday![index + 1].day?.condition!.text}",
+                                SizedBox(
+                                  width: screenWidth/4,
+                                  child: Text("${cubit.week[index]}",
+                                      style:
+                                          const TextStyle(color: Colors.white)),
                                 ),
-                                Text(
-                                    "${cubit.model?.forecast!.forecastday![index + 1].day?.avgtemp!.toInt()}°",
-                                    style:
-                                        const TextStyle(color: Colors.white)),
+                                const Expanded(
+                                  flex:2,
+                                  child: Image(
+                                      height: 50,
+                                      image: AssetImage("lib/images/sunny.png")),
+                                ),
+                                SizedBox(
+                                  width: screenWidth/4,
+                                  child: Text(
+                                    "${cubit.model?.forecast!.forecastday![index + 1].day?.condition!.text}",
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Text(
+                                      "${cubit.model?.forecast!.forecastday![index + 1].day?.avgtemp!.toInt()}°",
+                                      style:
+                                          const TextStyle(color: Colors.white)),
+                                ),
                               ]);
                         },
                       ),
