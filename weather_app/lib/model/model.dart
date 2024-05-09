@@ -139,7 +139,7 @@ class Astro {
 }
 
 class Hour {
-  int? time;
+  String? time;
   double? tempC;
   Condition? condition;
 
@@ -150,9 +150,7 @@ class Hour {
   });
 
   Hour.fromJson(Map<String, dynamic> json) {
-    List<String> datTimeParts = json['time'].split(" ");
-    List<String> timePart = datTimeParts[1].split(":");
-    time = int.parse(timePart[0]);
+    time = json['time'];
     tempC = json['temp_c'];
     condition = json['condition'] != null
         ? Condition.fromJson(json['condition'])

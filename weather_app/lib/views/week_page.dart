@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:weather_app/home_page.dart';
+import 'package:weather_app/views/home_page.dart';
 
 class WeekPage extends StatelessWidget {
   const WeekPage({super.key});
