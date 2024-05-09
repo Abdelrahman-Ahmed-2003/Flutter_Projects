@@ -19,7 +19,7 @@ class Location {
   String? name;
   String? region;
   String? country;
-  int? localtime;
+  String? localtime;
 
   Location({this.name, this.region, this.country, this.localtime});
 
@@ -27,10 +27,7 @@ class Location {
     name = json['name'];
     region = json['region'];
     country = json['country'];
-    List<String> dateTimeParts = json['localtime'].split(" ");
-    List<String> timeParts = dateTimeParts[1].split(":");
-    //List<String> timePart = dateTimeParts[1].split("-");
-    localtime = int.parse(timeParts[0]);
+    localtime = json['localtime'];
   }
 }
 
@@ -101,13 +98,22 @@ class Forecastday {
 }
 
 class Day {
+  double? avgtemp;
+  double? maxwindK;
+  int? avghumidity;
   Condition? condition;
 
   Day({
+    this.maxwindK,
+    this.avghumidity,
+    this.avgtemp,
     this.condition,
   });
 
   Day.fromJson(Map<String, dynamic> json) {
+    maxwindK = json['maxwind_kph'];
+    avghumidity = json['avghumidity'];
+    avgtemp = json['avgtemp_c'];
     condition = json['condition'] != null
         ? Condition.fromJson(json['condition'])
         : null;
@@ -142,14 +148,20 @@ class Hour {
   String? time;
   double? tempC;
   Condition? condition;
+  int? humidity;
+  double? windKph;
 
   Hour({
+    this.humidity,
+    this.windKph,
     this.time,
     this.tempC,
     this.condition,
   });
 
   Hour.fromJson(Map<String, dynamic> json) {
+    humidity = json['humidity'];
+    windKph = json['wind_kph'];
     time = json['time'];
     tempC = json['temp_c'];
     condition = json['condition'] != null

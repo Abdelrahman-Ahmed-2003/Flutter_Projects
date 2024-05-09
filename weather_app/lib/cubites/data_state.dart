@@ -16,3 +16,7 @@ class DataLoading extends DataState {
 class SetPosition extends DataState {
   SetPosition();
 }
+
+class SetDate extends DataState {
+  SetDate();
+}
