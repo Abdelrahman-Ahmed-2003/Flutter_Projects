@@ -1,10 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:weather_app/cubites/data_cubit.dart';
 
-  Future<void> determinePosition(BuildContext context) async {
-    var cubit = context.read<DataCubit>();
+class CurrentLocation {
+  Future<Position> determinePosition() async {
     bool serviceEnabled;
     LocationPermission permission;
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
@@ -22,7 +19,6 @@ import 'package:weather_app/cubites/data_cubit.dart';
       print(
           'Location permissions are permanently denied, we cannot request permissions.');
     }
-    cubit.setposition(await Geolocator.getCurrentPosition());
-    
-
+    return await Geolocator.getCurrentPosition();
   }
+}
