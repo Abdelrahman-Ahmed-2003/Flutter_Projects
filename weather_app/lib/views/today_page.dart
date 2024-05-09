@@ -1,20 +1,38 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:weather_app/cubites/data_cubit.dart';
 import 'package:weather_app/home_page.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class TodayPage extends StatefulWidget {
+  const TodayPage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<TodayPage> createState() => _TodayPageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _TodayPageState extends State<TodayPage> {
+  String checkTime(hours) {
+    print("******************************in checktime ");
+    print("******************************hours: ${hours[0].time}");
+    int hourNow = TimeOfDay.now().hour;
+    for (int i = 0; i < hours.length; ++i) {
+      List<String> dateTimeParts = hours[i].time.split(" ");
+      String timePart = dateTimeParts[1];
+      List<String> timeParts = timePart.split(":");
+      int hour = int.parse(timeParts[0]);
+      if (hour == hourNow) {
+        return hours[i].condition.text;
+      }
+    }
+    return "No";
+  }
+
   @override
   Widget build(BuildContext context) {
-    double screenHeight = MediaQuery.of(context).size.height;
-    double screenWidth = MediaQuery.of(context).size.width;
+    var cubit = context.read<DataCubit>();
+
     return Scaffold(
       backgroundColor: const Color(0xff5842A9),
       body: SafeArea(
@@ -28,13 +46,24 @@ class _HomePageState extends State<HomePage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+                  Container(
+                    height: 40,
+                    width: 40,
+                    decoration: BoxDecoration(
+                        color: const Color(0xff331C71),
+                        borderRadius: BorderRadius.circular(12)),
+                    child: const Icon(
+                      Icons.menu,
+                      color: Colors.white,
+                    ),
+                  ),
                   const Text(
                     "Weather App",
                     style: TextStyle(color: Colors.white, fontSize: 20),
                   ),
                   Container(
-                    height: screenHeight * 0.05,
-                    width: screenWidth * 0.1,
+                    height: 40,
+                    width: 40,
                     decoration: BoxDecoration(
                         color: const Color(0xff331C71),
                         borderRadius: BorderRadius.circular(12)),
@@ -45,51 +74,51 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ],
               ),
-              SizedBox(
-                height: screenHeight * 0.04,
+              const SizedBox(
+                height: 20,
               ),
-              const Text(
-                "Mostly Sunny",
-                style: TextStyle(color: Colors.white, fontSize: 20),
+              Text(
+                checkTime(cubit.model?.forecast!.forecastday![0].hour!),
+                style: const TextStyle(color: Colors.white, fontSize: 20),
               ),
               Stack(
                 children: [
                   Text(
-                    "25°",
-                    style: TextStyle(
+                    "${cubit.model?.forecast!.forecastday![0].hour![0].tempC?.toInt()}°",
+                    style: const TextStyle(
                         color: Colors.white,
-                        fontSize: 80,
+                        fontSize: 150,
                         fontWeight: FontWeight.bold),
                   ),
-                  Opacity(
+                  const Opacity(
                     opacity: 0.7,
                     child: Padding(
-                        padding: EdgeInsets.only(left: 20, top: screenHeight * 0.028),
+                        padding: EdgeInsets.only(left: 50, top: 80),
                         child: Image(
-                            height: screenHeight/7,
+                            height: 150,
                             image: AssetImage("lib/images/sunny.png"))),
                   ),
                 ],
               ),
               const Text("10feb2024"),
-              SizedBox(height: screenHeight * 0.04),
+              const SizedBox(height: 20),
               Row(
                 children: [
                   Container(
-                      height: screenHeight * 0.15,
-                      width: screenWidth * 0.9,
+                      height: 120,
+                      width: 350,
                       decoration: BoxDecoration(
                           color: const Color(0xff331C71),
                           borderRadius: BorderRadius.circular(16)),
-                      child: Row(
+                      child: const Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           Padding(
-                            padding: EdgeInsets.only(top: screenHeight*0.025, left: 8),
+                            padding: EdgeInsets.only(top: 14, left: 8),
                             child: Column(
                               children: [
                                 Image(
-                                  height: screenHeight*0.05,
+                                  height: 40,
                                   image:
                                       AssetImage("lib/images/protection.png"),
                                 ),
@@ -105,11 +134,11 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                           Padding(
-                            padding: EdgeInsets.only(top: screenHeight*0.025, left: 8),
+                            padding: EdgeInsets.only(top: 14, left: 8),
                             child: Column(
                               children: [
                                 Image(
-                                  height: screenHeight*0.05,
+                                  height: 40,
                                   image:
                                       AssetImage("lib/images/protection.png"),
                                 ),
@@ -148,7 +177,7 @@ class _HomePageState extends State<HomePage> {
                       ))
                 ],
               ),
-              SizedBox(height: screenHeight * 0.04),
+              const SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -172,35 +201,35 @@ class _HomePageState extends State<HomePage> {
                           style: TextStyle(color: Colors.white))),
                 ],
               ),
-              SizedBox(height: screenHeight * 0.04),
+              const SizedBox(height: 20),
               Container(
-                height: screenHeight * 0.18,
+                height: 120,
                 child: Row(
                   children: [
                     Expanded(
                       child: ListView.builder(
                         shrinkWrap: true,
                         scrollDirection: Axis.horizontal,
-                        itemCount: 5,
+                        itemCount: 24,
                         itemBuilder: (BuildContext context, int index) {
                           return Container(
                               margin: const EdgeInsets.only(right: 15.0),
-                              height: screenHeight * 0.2,
-                              width: screenWidth * 0.18,
+                              height: 120,
+                              width: 80,
                               decoration: BoxDecoration(
                                 color: const Color(0xff331C71),
                                 borderRadius: BorderRadius.circular(25),
                               ),
-                              child: const Column(
+                              child: Column(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
                                 children: [
-                                  Text("10:00 AM"),
-                                  Image(
+                                  Text('${cubit.model?.forecast!.forecastday![0].hour![index].time ?? 0}'),
+                                  const Image(
                                       height: 50,
                                       image:
                                           AssetImage("lib/images/sunny.png")),
-                                  Text("10"),
+                                  Text('${cubit.model?.forecast!.forecastday![0].hour![index].tempC!.toInt() ?? 0}°'),
                                 ],
                               ));
                         },
@@ -209,8 +238,8 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
               ),
-              SizedBox(
-                height: screenHeight * 0.03,
+              const SizedBox(
+                height: 20,
               ),
               MaterialButton(
                 onPressed: () {},
