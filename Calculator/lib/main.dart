@@ -130,10 +130,8 @@ class _CalculatorState extends State<Calculator> {
       if (!['+', '-', '*', '/', '%'].contains(btnText)) {
         if (btnText == '.') {
           if (opr.isEmpty && !num1.contains('.')) {
-            num1 += '.';
             appendText(btnText);
           } else if (opr.isNotEmpty && !num2.contains('.')) {
-            num2 += '.';
             appendText(btnText);
           }
         } else {
