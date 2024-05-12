@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 
 void main() => runApp(const MyApp());
@@ -24,9 +22,34 @@ class Calculator extends StatefulWidget {
 }
 
 class _CalculatorState extends State<Calculator> {
-  Widget calcbutton(String but, Color butcolor, ShapeBorder shap) {
-    return MaterialButton(
-        shape: shap,
+  Widget calcbutton(String but, Color butcolor) {
+    return IconButton(
+      style: ButtonStyle(
+        padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+          const EdgeInsets.all(28.0),
+        ),
+        backgroundColor: MaterialStateProperty.all<Color>(butcolor),
+        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(18.0),
+          ),
+        ),
+      ),
+      onPressed: () {
+        calculation(but);
+      },
+      icon: Text(
+        but,
+        style: const TextStyle(color: Colors.white, fontSize: 20.0),
+      ),
+      iconSize: 20.0,
+    );
+    /*MaterialButton(
+        shape: const CircleBorder(
+            side: BorderSide(
+          color: Colors.black,
+          width: 0.0,
+        )),
         onPressed: () {
           calculation(but);
         },
@@ -34,8 +57,8 @@ class _CalculatorState extends State<Calculator> {
         child: Text(but,
             style: const TextStyle(
               color: Colors.white,
-              fontSize: 25,
-            )));
+              fontSize: 20,
+            )));*/
   }
 
   @override
@@ -48,55 +71,61 @@ class _CalculatorState extends State<Calculator> {
           backgroundColor: Colors.teal[800],
           foregroundColor: Colors.green[200],
         ),
-        body: ListView(
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Container(
                 color: Colors.blueGrey,
-                width: 500,
-                height: 150,
+                height: 100.0,
                 alignment: Alignment.bottomRight,
                 child: Text(
                   "$text",
                   style: const TextStyle(fontSize: 35.0),
                 )),
-            Container(
-              padding: const EdgeInsets.only(top: 0.0),
-              child: GridView.count(
-                  physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  crossAxisCount: 4,
-                  mainAxisSpacing: 20.0,
-                  crossAxisSpacing: 10.0,
-                  children: [
-                    calcbutton(
-                        "AC", Colors.blueGrey[800]!, const CircleBorder()),
-                    calcbutton(
-                        "DEL", Colors.blueGrey[800]!, const CircleBorder()),
-                    calcbutton(
-                        "%", Colors.blueGrey[800]!, const CircleBorder()),
-                    calcbutton(
-                        "/", Colors.blueGrey[800]!, const CircleBorder()),
-                    calcbutton("7", Colors.blue, const CircleBorder()),
-                    calcbutton("8", Colors.blue, const CircleBorder()),
-                    calcbutton("9", Colors.blue, const CircleBorder()),
-                    calcbutton(
-                        "*", Colors.blueGrey[800]!, const CircleBorder()),
-                    calcbutton("4", Colors.blue, const CircleBorder()),
-                    calcbutton("5", Colors.blue, const CircleBorder()),
-                    calcbutton("6", Colors.blue, const CircleBorder()),
-                    calcbutton(
-                        "+", Colors.blueGrey[800]!, const CircleBorder()),
-                    calcbutton("1", Colors.blue, const CircleBorder()),
-                    calcbutton("2", Colors.blue, const CircleBorder()),
-                    calcbutton("3", Colors.blue, const CircleBorder()),
-                    calcbutton(
-                        "-", Colors.blueGrey[800]!, const CircleBorder()),
-                    calcbutton("0", Colors.blue, const StadiumBorder()),
-                    calcbutton(".", Colors.blue, const CircleBorder()),
-                    calcbutton(
-                        "=", Colors.blueGrey[800]!, const CircleBorder()),
-                  ]),
-            )
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                calcbutton("AC", Colors.blueGrey[800]!),
+                calcbutton("DEL", Colors.blueGrey[800]!),
+                calcbutton("%", Colors.blueGrey[800]!),
+                calcbutton("/", Colors.blueGrey[800]!),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                calcbutton("7", Colors.blue),
+                calcbutton("8", Colors.blue),
+                calcbutton("9", Colors.blue),
+                calcbutton("*", Colors.blueGrey[800]!),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                calcbutton("4", Colors.blue),
+                calcbutton("5", Colors.blue),
+                calcbutton("6", Colors.blue),
+                calcbutton("-", Colors.blueGrey[800]!),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                calcbutton("1", Colors.blue),
+                calcbutton("2", Colors.blue),
+                calcbutton("3", Colors.blue),
+                calcbutton("+", Colors.blueGrey[800]!),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                calcbutton("0", Colors.blue),
+                calcbutton(".", Colors.blue),
+                calcbutton("=", Colors.blueGrey[800]!),
+              ],
+            ),
           ],
         ));
   }
