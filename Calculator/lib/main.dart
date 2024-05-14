@@ -7,12 +7,13 @@ class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext conresult) {
     return const MaterialApp(
       title: "Calculator",
       debugShowCheckedModeBanner: false,
       home: Calculator(),
     );
+    
   }
 }
 
@@ -24,11 +25,8 @@ class Calculator extends StatefulWidget {
 }
 
 class _CalculatorState extends State<Calculator> {
-  String text = '0.0';
-  String result = '';
-  String opr = '';
-  String num1 = '';
-  String num2 = '';
+  late TextEditingController _controller = TextEditingController(text: '');
+  bool start = true;
 
   Widget calcbutton(String but, Color butcolor) {
     return MaterialButton(
@@ -49,7 +47,7 @@ class _CalculatorState extends State<Calculator> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext conresult) {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
@@ -61,20 +59,24 @@ class _CalculatorState extends State<Calculator> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Container(
-            color: Colors.blueGrey,
-            height: 100.0,
-            alignment: Alignment.bottomRight,
-            child: Text(
-              text,
-              style: const TextStyle(fontSize: 35.0),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: TextField(
+              showCursor: true,
+              readOnly: true,
+              controller: _controller,
+              style: const TextStyle(fontSize: 35.0, color: Colors.white),
+              textAlign: TextAlign.right,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+              ),
             ),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               calcbutton("AC", Colors.blueGrey[800]!),
-              calcbutton("!", Colors.blueGrey[800]!),
+              calcbutton("()", Colors.blueGrey[800]!),
               calcbutton("%", Colors.blueGrey[800]!),
               calcbutton("/", Colors.blueGrey[800]!),
             ],
@@ -120,85 +122,107 @@ class _CalculatorState extends State<Calculator> {
     );
   }
 
-  void calculation(String btnText) {
-    if (btnText == "AC") {
+  void calculation(String btn) {
+    if (btn == "AC") {
       clearAll();
-    } else if (btnText == "=") {
+    } else if (btn == "=") {
       evaluate();
-    } else if (btnText == "Del") {
+    } else if (btn == "Del") {
       delete();
     } else {
-      if (!['+', '-', '*', '/', '%'].contains(btnText)) {
-        if (btnText == '.') {
-          if (opr.isEmpty && !num1.contains('.')) {
-            appendText(btnText);
-          } else if (opr.isNotEmpty && !num2.contains('.')) {
-            appendText(btnText);
-          }
-        } else {
-          appendText(btnText);
+      int cursorPosition = _controller.selection.baseOffset - 1;
+      if(cursorPosition < 0) start = true;
+      if (btn == '.') {
+        late String temp = '';
+        for (int i = cursorPosition; i >= 0; i--) {
+          if (i < _controller.text.length &&
+              !['+', '*', '/', '-', '%'].contains(_controller.text[i])) {
+            temp += _controller.text[i];
+          } else
+            break;
         }
-      } else {
-        opr = btnText;
-        appendText(btnText);
-      }
+        print(temp);
+        if (checkDP(temp)) {
+          return;
+        } else {
+          appendresult(btn);
+        }
+      } else
+        appendresult(btn);
     }
   }
 
   void clearAll() {
     setState(() {
-      text = '0.0';
-      result = '';
-      opr = '';
-      num1 = '';
-      num2 = '';
+      _controller.text = '';
     });
   }
 
   void evaluate() {
-    String expression = result;
-    Parser p = Parser();
-    Expression exp = p.parse(expression);
-    ContextModel cm = ContextModel();
-    double eval = exp.evaluate(EvaluationType.REAL, cm);
+    try {
+      String expression = _controller.text;
+      Parser p = Parser();
+      Expression exp = p.parse(expression);
+      ContextModel cm = ContextModel();
+      double eval = exp.evaluate(EvaluationType.REAL, cm);
 
-    setState(() {
-      text = eval.toString();
-      result = eval.toString();
-      opr = '';
-      num1 = eval.toString();
-      num2 = '';
-    });
+      setState(() {
+        _controller.text = eval.toString();
+      });
+    } catch (e) {}
   }
 
   void delete() {
     setState(() {
-      if (result.isNotEmpty) {
-        result = result.substring(0, result.length - 1);
-        text = result;
+      if (_controller.text.isNotEmpty && _controller.selection.baseOffset > 0) {
+        int cursorPosition = _controller.selection.baseOffset;
+        String newText = _controller.text
+            .replaceRange(cursorPosition - 1, cursorPosition, '');
+        _controller.value = TextEditingValue(
+          text: newText,
+          selection: TextSelection.collapsed(offset: cursorPosition - 1),
+        );
       }
     });
   }
 
-  void appendText(String btnText) {
-    bool endsWithOperator = result.isNotEmpty &&
-        ['+', '-', '*', '/', '%'].contains(result[result.length - 1]);
-
-    // Check if the current input is an operator and the previous character was also an operator
-    if (['+', '-', '*', '/', '%'].contains(btnText) && endsWithOperator) {
-      // If so, remove the last operator from the result
-      setState(() {
-        result = result.substring(0, result.length - 1);
-      });
+  void appendresult(String btnresult) {
+    int cursorPosition = _controller.selection.baseOffset;
+    bool check = false;
+    if (!start) {
+      check = ['+', '*', '/', '-', '%']
+          .contains(_controller.text[_controller.selection.baseOffset - 1]);
+    } else if (['*', '/', '%', '+', '-'].contains(btnresult)) {
+      return;
     }
-    setState(() {
-      result += btnText;
-      text = result;
-      if (opr.isEmpty) {
-        num1 += btnText;
-      } else {
-        num2 += btnText;
-      }
-    });
+    bool endsWithOperator = _controller.text.isNotEmpty && check;
+
+    if (cursorPosition > 0 &&
+        ['+', '*', '/', '%', '-'].contains(btnresult) &&
+        endsWithOperator) {
+      setState(() {
+        _controller.text = _controller.text
+            .replaceRange(cursorPosition - 1, cursorPosition, btnresult);
+        _controller.selection = TextSelection.collapsed(offset: cursorPosition);
+      });
+    } else {
+      start = false;
+      String newText = _controller.text.substring(0, cursorPosition) +
+          btnresult +
+          _controller.text.substring(cursorPosition, _controller.text.length);
+
+      _controller.value = _controller.value.copyWith(
+        text: newText,
+        selection: TextSelection.collapsed(offset: cursorPosition + 1),
+      );
+    }
+  }
+
+  bool checkDP(String text) {
+    if (text.contains('.')) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }
