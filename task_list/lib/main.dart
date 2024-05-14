@@ -8,12 +8,11 @@ import 'package:task_list/pages/calendar.dart';
 import 'package:task_list/pages/display_cate.dart';
 import 'package:task_list/pages/main_page.dart';
 import 'package:task_list/pages/task.dart';
-import 'package:task_list/pages/edit_task.dart';
 
 // solve
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   await Hive.initFlutter();
   //await Hive.deleteBoxFromDisk('task_box');
   Hive.registerAdapter(TaskAdapter());
@@ -40,9 +39,15 @@ class _MyWidgetState extends State<MyWidget> {
       routes: {
         '/': (context) => const MianPage(),
         '/calendar': (context) => const Calendar(),
-        '/addtask': (context) => const AddTask(),
+        '/addtask': (context) {
+          final Map arguments =
+              ModalRoute.of(context)!.settings.arguments as Map;
+          return AddTask(
+            task: arguments['task'],
+            index: arguments['index'],
+          );
+        },
         '/displaycate': (context) => const Category(),
-        '/edit_task': (context) => const EditTask(),
       },
       debugShowCheckedModeBanner: false,
     );

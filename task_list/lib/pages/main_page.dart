@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:task_list/pages/category.dart';
 import 'package:task_list/pages/display_tasks.dart';
+import 'package:task_list/pages/task.dart';
 
 class MianPage extends StatefulWidget {
   const MianPage({super.key});
@@ -22,11 +23,17 @@ class _MianPageState extends State<MianPage> {
             borderRadius: BorderRadius.circular(30),
             side: const BorderSide(color: Colors.white)),
         onPressed: () {
-          Navigator.pushNamed(context, '/addtask');
+          Navigator.pushNamed(
+            context,
+            "/addtask",
+            arguments: {
+              'task': Task(),
+              'index': -1,
+            },
+          );
         },
         child: const Icon(Icons.add),
       ),
-  
       appBar: AppBar(
         backgroundColor: Colors.teal,
         title: const Column(
@@ -69,10 +76,10 @@ class _MianPageState extends State<MianPage> {
             ),
             Expanded(
               child: Container(
-                decoration: BoxDecoration(
-                    color: Colors.white, borderRadius: BorderRadius.circular(15)),
-                
-                child: const DisplayTask()),
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(15)),
+                  child: const DisplayTask()),
             ),
           ],
         ),

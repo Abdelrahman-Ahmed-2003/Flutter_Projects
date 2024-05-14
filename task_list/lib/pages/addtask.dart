@@ -5,22 +5,20 @@ import 'package:task_list/data/data.dart';
 
 import 'package:task_list/pages/task.dart';
 
+// ignore: must_be_immutable
 class AddTask extends StatefulWidget {
-  const AddTask({super.key});
+  late Task task = Task();
+  late int index = -1;
+  AddTask({super.key, required this.task, required this.index});
 
   @override
   State<AddTask> createState() => _AddTaskState();
 }
 
 class _AddTaskState extends State<AddTask> {
-  String title = "";
-  String desc = "";
-  TimeOfDay time = TimeOfDay.now();
-  DateTime dateTime = DateTime.now();
-  String category = 'work';
-
   GlobalKey<FormState> formKey = GlobalKey();
   Color clor = const Color.fromARGB(255, 26, 180, 183);
+  bool add = true;
 
   @override
   Widget build(BuildContext context) {
@@ -28,16 +26,25 @@ class _AddTaskState extends State<AddTask> {
       listener: (context, state) {},
       builder: (context, state) {
         var cubit = context.watch<DataCubit>();
-        var task = Task();
+        if (widget.index != -1) {
+          add = false;
+        } else {
+        }
         return Scaffold(
           floatingActionButton: FloatingActionButton(
             onPressed: () {
               if (formKey.currentState!.validate()) {
+                print(
+                    '*************************** ${widget.task.time}   ${widget.task.date}     ${widget.task.category}           ${widget.task.desc}          ${widget.task.title}                      indexxxxx${widget.index}');
                 formKey.currentState!.save();
-                task.time = "${time.hour} : ${time.minute}";
-                task.date = dateTime.toString().split(" ")[0];
-                task.category = category;
-                cubit.addTask(task);
+                if (add) {
+                  print('added************************************');
+                  cubit.addTask(widget.task);
+                } else {
+                  print('edited************************************');
+                  cubit.editTask(widget.index, widget.task);
+                }
+                cubit.getValues();
                 Navigator.of(context).pop();
               }
             },
@@ -46,8 +53,8 @@ class _AddTaskState extends State<AddTask> {
           appBar: AppBar(
             elevation: 0.0,
             backgroundColor: Colors.teal,
-            title: const Center(
-              child: Text("New Task"),
+            title: Center(
+              child: add ? const Text("Add Task") : const Text("Edit Task"),
             ),
           ),
           body: SingleChildScrollView(
@@ -61,10 +68,11 @@ class _AddTaskState extends State<AddTask> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     TextFormField(
+                      initialValue: widget.task.title,
                       maxLines: 2,
                       maxLength: 100,
-                      onSaved: (newValue) {
-                        task.title = newValue!;
+                      onChanged: (newValue) {
+                        widget.task.title = newValue;
                       },
                       validator: (value) {
                         if (value!.isEmpty) {
@@ -79,10 +87,11 @@ class _AddTaskState extends State<AddTask> {
                     ),
                     //const Spacer(),
                     TextFormField(
+                      initialValue: widget.task.desc,
                       maxLines: 2,
                       maxLength: 400,
-                      onSaved: (newValue) {
-                        task.desc = newValue!;
+                      onChanged: (newValue) {
+                        widget.task.desc = newValue;
                       },
                       decoration: const InputDecoration(
                           labelText: "Description",
@@ -96,60 +105,64 @@ class _AddTaskState extends State<AddTask> {
                           children: [
                             Text(
                               "Date",
-                              style: TextStyle(fontSize: 20, color: Colors.white),
+                              style:
+                                  TextStyle(fontSize: 20, color: Colors.white),
                             ),
                             Spacer(),
                             Text(
                               "Time",
-                              style: TextStyle(fontSize: 20, color: Colors.white),
+                              style:
+                                  TextStyle(fontSize: 20, color: Colors.white),
                             ),
                           ],
                         ),
                         Row(
-                      children: [
-                        TextButton(
-                          onPressed: () async {
-                            DateTime? newdate = await showDatePicker(
-                                context: context,
-                                initialDate: DateTime.now(),
-                                firstDate: DateTime(2000),
-                                lastDate: DateTime(2100));
-                            if (newdate != null) {
-                              setState(() {
-                                dateTime = newdate;
-                              });
-                            }
-                          },
-                          child: Text(
-                            dateTime.toString().split(" ")[0],
-                            style: const TextStyle(
-                                fontSize: 20, color: Colors.white),
-                          ),
+                          children: [
+                            TextButton(
+                              onPressed: () async {
+                                DateTime? newdate = await showDatePicker(
+                                    context: context,
+                                    initialDate: DateTime.now(),
+                                    firstDate: DateTime(2000),
+                                    lastDate: DateTime(2100));
+                                if (newdate != null) {
+                                  setState(() {
+                                    widget.task.date =
+                                        newdate.toString().split(" ")[0];
+                                  });
+                                }
+                              },
+                              child: Text(
+                                widget.task.date,
+                                style: const TextStyle(
+                                    fontSize: 20, color: Colors.white),
+                              ),
+                            ),
+                            const Spacer(),
+                            TextButton(
+                                onPressed: () async {
+                                  TimeOfDay? newtime = await showTimePicker(
+                                      context: context,
+                                      initialTime: TimeOfDay.now());
+                                  if (newtime != null) {
+                                    setState(() {
+                                      widget.task.time =
+                                          "${newtime.hour} : ${newtime.minute}";
+                                    });
+                                  }
+                                },
+                                child: Text(
+                                  widget.task.time,
+                                  style: const TextStyle(
+                                      fontSize: 20, color: Colors.white),
+                                ))
+                          ],
                         ),
-                        const Spacer(),
-                        TextButton(
-                            onPressed: () async {
-                              TimeOfDay? newtime = await showTimePicker(
-                                  context: context,
-                                  initialTime: TimeOfDay.now());
-                              if (newtime != null) {
-                                setState(() {
-                                  time = newtime;
-                                });
-                              }
-                            },
-                            child: Text(
-                              "${time.hour} : ${time.minute}",
-                              style: const TextStyle(
-                                  fontSize: 20, color: Colors.white),
-                            ))
                       ],
                     ),
-                      ],
-                    ),
-                    
+
                     //const Spacer(),
-            
+
                     Column(
                       children: [
                         const Text("Category",
@@ -171,7 +184,8 @@ class _AddTaskState extends State<AddTask> {
                                       style: ButtonStyle(
                                           backgroundColor:
                                               MaterialStateProperty.all(
-                                                  category == listCat[index]
+                                                  widget.task.category ==
+                                                          listCat[index]
                                                       ? Colors.white
                                                       : clor)),
                                       child: Text(
@@ -180,7 +194,7 @@ class _AddTaskState extends State<AddTask> {
                                       ),
                                       onPressed: () {
                                         setState(() {
-                                          category = listCat[index];
+                                          widget.task.category = listCat[index];
                                         });
                                       },
                                     );

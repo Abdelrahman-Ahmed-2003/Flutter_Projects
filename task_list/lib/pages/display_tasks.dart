@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_list/cubits/cubit/data_cubit.dart';
 
-
 class DisplayTask extends StatefulWidget {
   const DisplayTask({super.key});
 
@@ -79,9 +78,7 @@ class _DisplayTaskState extends State<DisplayTask> {
                                       : TextDecoration.none,
                                 ),
                               ),
-                              /*const SizedBox(
-                                width: 50,
-                              ),*/
+                              
                               Text(
                                 tasks[index].category,
                                 style: TextStyle(
@@ -91,15 +88,18 @@ class _DisplayTaskState extends State<DisplayTask> {
                                       : TextDecoration.none,
                                 ),
                               ),
-                              //const Spacer(),
                               IconButton(
                                   onPressed: tasks[index].isDone
                                       ? null
                                       : () {
-                                          cubit.setindex(index);
-                                          cubit.changetask(tasks[index]);
                                           Navigator.pushNamed(
-                                              context, "/edit_task");
+                                            context,
+                                            "/addtask",
+                                            arguments: {
+                                              'task': tasks[index],
+                                              'index': index,
+                                            },
+                                          );
                                         },
                                   icon: const Icon(Icons.edit)),
                               IconButton(
@@ -111,16 +111,12 @@ class _DisplayTaskState extends State<DisplayTask> {
                                   icon: const Icon(Icons.delete)),
                             ],
                           ),
-                          Row(
-                            children: [
-                              Text(tasks[index].desc,
-                                  style: TextStyle(
-                                    decoration: tasks[index].isDone
-                                        ? TextDecoration.lineThrough
-                                        : TextDecoration.none,
-                                  )),
-                            ],
-                          ),
+                          Text(tasks[index].desc,
+                              style: TextStyle(
+                                decoration: tasks[index].isDone
+                                    ? TextDecoration.lineThrough
+                                    : TextDecoration.none,
+                              )),
                           const Divider(),
                         ],
                       )),
