@@ -35,10 +35,10 @@ class _CalendarState extends State<Calendar> {
           },
           child: Scaffold(
             appBar: AppBar(
-              backgroundColor: Colors.blue,
+              backgroundColor: Colors.teal,
             ),
             body: Container(
-              color: Colors.blue,
+              color: Colors.teal,
               padding: const EdgeInsets.symmetric(horizontal: 15),
               child: Column(
                 children: [
@@ -58,7 +58,16 @@ class _CalendarState extends State<Calendar> {
                       _onDaySelected(selectedDay, focusedDay, cubit);
                     },
                   ),
-                  const DisplayTask(),
+                  Divider(
+                    color: Colors.white,
+                  ),
+                  Expanded(
+                    child: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(15)),
+                        child: const DisplayTask()),
+                  ),
                 ],
               ),
             ),

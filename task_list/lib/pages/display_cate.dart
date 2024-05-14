@@ -20,10 +20,10 @@ class Category extends StatelessWidget {
             },
             child: Scaffold(
                 appBar: AppBar(
-                  backgroundColor: Colors.blue,
+                  backgroundColor: Colors.teal,
                 ),
                 body: Container(
-                    color: Colors.blue,
+                    color: Colors.teal,
                     padding: const EdgeInsets.symmetric(
                         horizontal: 15, vertical: 15),
                     child: Column(
@@ -31,7 +31,13 @@ class Category extends StatelessWidget {
                         Text("All Tasks in ${cubit.getcategory()}",
                             style: const TextStyle(
                                 fontSize: 30, color: Colors.white)),
-                        const DisplayTask(),
+                        Expanded(
+              child: Container(
+                decoration: BoxDecoration(
+                    color: Colors.white, borderRadius: BorderRadius.circular(15)),
+                
+                child: const DisplayTask()),
+            ),
                       ],
                     ))));
       },

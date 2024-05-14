@@ -14,11 +14,9 @@ class _MianPageState extends State<MianPage> {
     Navigator.pushNamed(context, '/calendar');
   }
 
-  double pad = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(30),
@@ -28,14 +26,9 @@ class _MianPageState extends State<MianPage> {
         },
         child: const Icon(Icons.add),
       ),
-      bottomNavigationBar: const BottomAppBar(
-        height: 50,
-        color: Color.fromARGB(72, 34, 219, 92),
-        notchMargin: 3.0,
-        shape: CircularNotchedRectangle(),
-      ),
+  
       appBar: AppBar(
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.teal,
         title: const Column(
           children: [
             Text(
@@ -53,10 +46,10 @@ class _MianPageState extends State<MianPage> {
       ),
       body: Container(
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-        color: Colors.blue,
+        color: Colors.teal,
         child: Column(
           children: [
-            const DisplayCAt(),
+            DisplayCAt(),
             const SizedBox(
               height: 40,
             ),
@@ -74,7 +67,13 @@ class _MianPageState extends State<MianPage> {
             const SizedBox(
               height: 15,
             ),
-            const DisplayTask(),
+            Expanded(
+              child: Container(
+                decoration: BoxDecoration(
+                    color: Colors.white, borderRadius: BorderRadius.circular(15)),
+                
+                child: const DisplayTask()),
+            ),
           ],
         ),
       ),

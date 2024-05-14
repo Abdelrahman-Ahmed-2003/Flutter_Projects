@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_list/cubits/cubit/data_cubit.dart';
 import 'package:task_list/data/data.dart';
@@ -46,7 +45,7 @@ class _AddTaskState extends State<AddTask> {
           ),
           appBar: AppBar(
             elevation: 0.0,
-            backgroundColor: Colors.blue,
+            backgroundColor: Colors.teal,
             title: const Center(
               child: Text("New Task"),
             ),
@@ -55,12 +54,11 @@ class _AddTaskState extends State<AddTask> {
             child: Container(
               height: MediaQuery.of(context).size.height,
               padding: const EdgeInsets.all(15),
-              color: Colors.blue,
+              color: Colors.teal,
               child: Form(
                 key: formKey,
                 child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     TextFormField(
                       maxLines: 2,
@@ -79,7 +77,7 @@ class _AddTaskState extends State<AddTask> {
                           labelStyle:
                               TextStyle(fontSize: 20, color: Colors.white)),
                     ),
-                    const Spacer(),
+                    //const Spacer(),
                     TextFormField(
                       maxLines: 2,
                       maxLength: 400,
@@ -91,21 +89,23 @@ class _AddTaskState extends State<AddTask> {
                           labelStyle:
                               TextStyle(fontSize: 20, color: Colors.white)),
                     ),
-                    const Spacer(),
-                    const Row(
+                    //const Spacer(),
+                    Column(
                       children: [
-                        Text(
-                          "Date",
-                          style: TextStyle(fontSize: 20, color: Colors.white),
+                        const Row(
+                          children: [
+                            Text(
+                              "Date",
+                              style: TextStyle(fontSize: 20, color: Colors.white),
+                            ),
+                            Spacer(),
+                            Text(
+                              "Time",
+                              style: TextStyle(fontSize: 20, color: Colors.white),
+                            ),
+                          ],
                         ),
-                        Spacer(),
-                        Text(
-                          "Time",
-                          style: TextStyle(fontSize: 20, color: Colors.white),
-                        ),
-                      ],
-                    ),
-                    Row(
+                        Row(
                       children: [
                         TextButton(
                           onPressed: () async {
@@ -145,46 +145,62 @@ class _AddTaskState extends State<AddTask> {
                             ))
                       ],
                     ),
-                    const Spacer(),
-                    const Text("Category",
-                        style: TextStyle(fontSize: 20, color: Colors.white)),
-                    const SizedBox(
-                      height: 15,
+                      ],
                     ),
-                    Expanded(
-                      child: ListView.separated(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: listCat.length,
-                        itemBuilder: (context, index) {
-                          return Row(
-                            children: [
-                              TextButton(
-                                style: ButtonStyle(
-                                    backgroundColor:
-                                        MaterialStateProperty.all(
-                                            category == listCat[index]
-                                                ? Colors.white
-                                                : clor)),
-                                child: Text(
-                                  listCat[index],
-                                  style: const TextStyle(fontSize: 20),
+                    
+                    //const Spacer(),
+            
+                    Column(
+                      children: [
+                        const Text("Category",
+                            style:
+                                TextStyle(fontSize: 20, color: Colors.white)),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: SizedBox(
+                                height: 50,
+                                child: ListView.separated(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: listCat.length,
+                                  itemBuilder: (context, index) {
+                                    return TextButton(
+                                      style: ButtonStyle(
+                                          backgroundColor:
+                                              MaterialStateProperty.all(
+                                                  category == listCat[index]
+                                                      ? Colors.white
+                                                      : clor)),
+                                      child: Text(
+                                        listCat[index],
+                                        style: const TextStyle(fontSize: 20),
+                                      ),
+                                      onPressed: () {
+                                        setState(() {
+                                          category = listCat[index];
+                                        });
+                                      },
+                                    );
+                                  },
+                                  separatorBuilder:
+                                      (BuildContext context, int index) {
+                                    return const SizedBox(
+                                      width: 10,
+                                    );
+                                  },
                                 ),
-                                onPressed: () {
-                                  setState(() {
-                                    category = listCat[index];
-                                  });
-                                },
                               ),
-                            ],
-                          );
-                        },
-                        separatorBuilder: (BuildContext context, int index) {
-                          return const SizedBox(
-                            width: 10,
-                          );
-                        },
-                      ),
-                    )
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 125,
+                    ),
                   ],
                 ),
               ),

@@ -38,7 +38,7 @@ class _EditTaskState extends State<EditTask> {
           ),
           appBar: AppBar(
             elevation: 0.0,
-            backgroundColor: Colors.blue,
+            backgroundColor: Colors.teal,
             title: const Center(
               child: Text("Edit Task"),
             ),
@@ -47,7 +47,7 @@ class _EditTaskState extends State<EditTask> {
             child: Container(
               height: MediaQuery.of(context).size.height,
               padding: const EdgeInsets.all(15),
-              color: Colors.blue,
+              color: Colors.teal,
               child: Form(
                 key: formKey,
                 child: Column(
