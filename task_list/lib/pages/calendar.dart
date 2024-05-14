@@ -58,7 +58,7 @@ class _CalendarState extends State<Calendar> {
                       _onDaySelected(selectedDay, focusedDay, cubit);
                     },
                   ),
-                  Divider(
+                  const Divider(
                     color: Colors.white,
                   ),
                   Expanded(

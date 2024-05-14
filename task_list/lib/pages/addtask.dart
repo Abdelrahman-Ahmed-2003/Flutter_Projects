@@ -34,14 +34,11 @@ class _AddTaskState extends State<AddTask> {
           floatingActionButton: FloatingActionButton(
             onPressed: () {
               if (formKey.currentState!.validate()) {
-                print(
-                    '*************************** ${widget.task.time}   ${widget.task.date}     ${widget.task.category}           ${widget.task.desc}          ${widget.task.title}                      indexxxxx${widget.index}');
+                
                 formKey.currentState!.save();
                 if (add) {
-                  print('added************************************');
                   cubit.addTask(widget.task);
                 } else {
-                  print('edited************************************');
                   cubit.editTask(widget.index, widget.task);
                 }
                 cubit.getValues();
@@ -85,7 +82,7 @@ class _AddTaskState extends State<AddTask> {
                           labelStyle:
                               TextStyle(fontSize: 20, color: Colors.white)),
                     ),
-                    //const Spacer(),
+                    
                     TextFormField(
                       initialValue: widget.task.desc,
                       maxLines: 2,
@@ -98,7 +95,7 @@ class _AddTaskState extends State<AddTask> {
                           labelStyle:
                               TextStyle(fontSize: 20, color: Colors.white)),
                     ),
-                    //const Spacer(),
+                    
                     Column(
                       children: [
                         const Row(
@@ -161,7 +158,7 @@ class _AddTaskState extends State<AddTask> {
                       ],
                     ),
 
-                    //const Spacer(),
+                    
 
                     Column(
                       children: [

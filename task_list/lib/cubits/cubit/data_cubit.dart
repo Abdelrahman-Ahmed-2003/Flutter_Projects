@@ -20,8 +20,8 @@ class DataCubit extends Cubit<DataState> {
   }
 
 
-  addTask(Task task) {
-    box.add(task);
+  addTask(Task task) async{
+    await box.add(task);
     emit(DataAdded());
   }
 
@@ -52,9 +52,4 @@ class DataCubit extends Cubit<DataState> {
   getcategory() {
     return selectedCategory;
   }
-
-  Task searchTask(String title) {
-  var tasks = box.values.toList();
-  return tasks.firstWhere((element) => element.title == title);
-}
 }
