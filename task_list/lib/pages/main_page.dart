@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:task_list/pages/calendar.dart';
 import 'package:task_list/pages/category.dart';
 import 'package:task_list/pages/display_tasks.dart';
 import 'package:task_list/pages/task.dart';
@@ -11,9 +12,13 @@ class MianPage extends StatefulWidget {
 }
 
 class _MianPageState extends State<MianPage> {
+  
   void _onpressedCalendar() {
     Navigator.pushNamed(context, '/calendar');
   }
+
+  
+
 
   @override
   Widget build(BuildContext context) {
@@ -36,19 +41,16 @@ class _MianPageState extends State<MianPage> {
       ),
       appBar: AppBar(
         backgroundColor: Colors.teal,
-        title: const Column(
-          children: [
-            Text(
-              "Hi Abdo",
-              style: TextStyle(fontSize: 40),
-            ),
-          ],
+        title: const Text(
+          "Task List",
+          style: TextStyle(fontSize: 40),
         ),
         elevation: 0.0,
         actions: [
           IconButton(
-              onPressed: _onpressedCalendar,
-              icon: const Icon(Icons.calendar_month)),
+  icon: const Icon(Icons.calendar_today),
+  onPressed: _onpressedCalendar,
+),
         ],
       ),
       body: Container(
@@ -56,7 +58,7 @@ class _MianPageState extends State<MianPage> {
         color: Colors.teal,
         child: Column(
           children: [
-            DisplayCAt(),
+            const DisplayCAt(),
             const SizedBox(
               height: 40,
             ),

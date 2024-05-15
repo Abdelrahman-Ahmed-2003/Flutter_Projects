@@ -23,7 +23,6 @@ void main() async {
     child: const MyWidget(),
   ));
 }
-
 class MyWidget extends StatefulWidget {
   const MyWidget({super.key});
 
@@ -36,18 +35,46 @@ class _MyWidgetState extends State<MyWidget> {
   Widget build(BuildContext context) {
     return MaterialApp(
       initialRoute: '/',
-      routes: {
-        '/': (context) => const MianPage(),
-        '/calendar': (context) => const Calendar(),
-        '/addtask': (context) {
-          final Map arguments =
-              ModalRoute.of(context)!.settings.arguments as Map;
-          return AddTask(
-            task: arguments['task'],
-            index: arguments['index'],
-          );
-        },
-        '/displaycate': (context) => const Category(),
+      onGenerateRoute: (settings) {
+        WidgetBuilder builder;
+        // Match the route name with a widget
+        switch (settings.name) {
+          case '/':
+            builder = (BuildContext _) => const MianPage();
+            break;
+          case '/calendar':
+            builder = (BuildContext _) => const Calendar();
+            break;
+          case '/addtask':
+            final Map arguments = settings.arguments as Map;
+            builder = (BuildContext _) => AddTask(
+              task: arguments['task'],
+              index: arguments['index'],
+            );
+            break;
+          case '/displaycate':
+            builder = (BuildContext _) => const Category();
+            break;
+          default:
+            throw Exception('Invalid route: ${settings.name}');
+        }
+        // You can also extract the arguments using settings.arguments here
+
+        return PageRouteBuilder(
+          pageBuilder: (context, animation1, animation2) => builder(context),
+          transitionDuration: const Duration(milliseconds: 300),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            var begin = const Offset(1.0, 0.0);
+            var end = Offset.zero;
+            var tween = Tween(begin: begin, end: end);
+            var offsetAnimation = animation.drive(tween);
+
+            return SlideTransition(
+              position: offsetAnimation,
+              child: child,
+            );
+          },
+        );
       },
       debugShowCheckedModeBanner: false,
     );
