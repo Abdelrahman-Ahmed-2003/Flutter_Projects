@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_list/cubits/cubit/data_cubit.dart';
 
@@ -11,28 +10,27 @@ class DisplayTask extends StatefulWidget {
 }
 
 class _DisplayTaskState extends State<DisplayTask> {
+
+
+
+  @override
+  void initState() {
+    var cubit = context.read<DataCubit>();
+    super.initState();
+    cubit.getValues();
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<DataCubit, DataState>(
       listener: (context, state) {},
       builder: (context, state) {
-        print("*************************************get values");
         var cubit = context.read<DataCubit>();
-        List tasks = [];
-        cubit.getValues();
-        if (cubit.getcategory() != "") {
-          for (var element in cubit.data) {
-            if (element.category == cubit.getcategory()) {
-              tasks.add(element);
-            }
-          }
-        } else {
-          for (var element in cubit.data) {
-            if (element.date == cubit.getDate()) {
-              tasks.add(element);
-            }
-          }
-        }
+        List tasks = cubit.data;
+        
+        
 
         if (tasks.isEmpty) {
           return const Center(
@@ -108,13 +106,13 @@ class _DisplayTaskState extends State<DisplayTask> {
                                             );
                                           },
                                     icon: const Icon(Icons.edit)),
-                                IconButton(
+                                /*IconButton(
                                     onPressed: tasks[index].isDone
                                         ? null
                                         : () {
                                             cubit.deleteTask(index);
                                           },
-                                    icon: const Icon(Icons.delete)),
+                                    icon: const Icon(Icons.delete)),*/
                               ],
                             ),
                             Text(tasks[index].desc,

@@ -11,28 +11,42 @@ class DataCubit extends Cubit<DataState> {
   var box = Hive.box("task_box");
   List data = [];
 
-
-  
-
   getValues() {
     data = box.values.toList();
+    List tasks = [];
+    if (getcategory() != "") {
+          for (var element in data) {
+            if (element.category == getcategory()) {
+              tasks.add(element);
+            }
+          }
+        } else {
+          for (var element in data) {
+            if (element.date == getDate()) {
+              tasks.add(element);
+            }
+          }
+        }
+    data = tasks;
     emit(DataLoaded(data));
   }
 
-
-  addTask(Task task) async{
+  addTask(Task task) async {
     await box.add(task);
     emit(DataAdded());
+    getValues();
   }
 
-  editTask(int index ,Task task) async{
+  editTask(int index, Task task) async {
     await box.putAt(index, task);
     emit(TaskEdit());
+    getValues();
   }
 
   deleteTask(index) {
     box.deleteAt(index);
     emit(DataRemove());
+    getValues();
   }
 
   changeSelDate(date) {

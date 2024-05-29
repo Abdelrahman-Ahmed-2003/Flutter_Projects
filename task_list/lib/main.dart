@@ -23,6 +23,7 @@ void main() async {
     child: const MyWidget(),
   ));
 }
+
 class MyWidget extends StatefulWidget {
   const MyWidget({super.key});
 
@@ -48,9 +49,9 @@ class _MyWidgetState extends State<MyWidget> {
           case '/addtask':
             final Map arguments = settings.arguments as Map;
             builder = (BuildContext _) => AddTask(
-              task: arguments['task'],
-              index: arguments['index'],
-            );
+                  task: arguments['task'],
+                  index: arguments['index'],
+                );
             break;
           case '/displaycate':
             builder = (BuildContext _) => const Category();
@@ -62,7 +63,8 @@ class _MyWidgetState extends State<MyWidget> {
 
         return PageRouteBuilder(
           pageBuilder: (context, animation1, animation2) => builder(context),
-          transitionDuration: const Duration(milliseconds: 300),
+          transitionDuration: const Duration(milliseconds: 100),
+          reverseTransitionDuration: const Duration(milliseconds: 150),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             var begin = const Offset(1.0, 0.0);
             var end = Offset.zero;

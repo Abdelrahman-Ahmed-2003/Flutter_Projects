@@ -16,6 +16,9 @@ class Category extends StatelessWidget {
             onPopInvoked: (didPop) {
               if (didPop) {
                 cubit.changeSelCategory("");
+                Future.delayed(const Duration(milliseconds: 200), () {
+                  cubit.getValues();
+                });
               }
             },
             child: Scaffold(
@@ -32,12 +35,12 @@ class Category extends StatelessWidget {
                             style: const TextStyle(
                                 fontSize: 30, color: Colors.white)),
                         Expanded(
-              child: Container(
-                decoration: BoxDecoration(
-                    color: Colors.white, borderRadius: BorderRadius.circular(15)),
-                
-                child: const DisplayTask()),
-            ),
+                          child: Container(
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(15)),
+                              child: const DisplayTask()),
+                        ),
                       ],
                     ))));
       },

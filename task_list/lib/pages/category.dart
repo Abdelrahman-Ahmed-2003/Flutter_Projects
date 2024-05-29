@@ -49,9 +49,11 @@ class _DisplayCAtState extends State<DisplayCAt> {
             child: GestureDetector(
               onTap: () {
                 Navigator.pushNamed(context, "/displaycate");
-                Future.delayed(const Duration(milliseconds: 10), () {
                   cubit.changeSelCategory(listCat[index]);
+                  Future.delayed(const Duration(milliseconds: 1000), () {
+                  cubit.getValues();
                 });
+                
                 
               },
               child: Column(
