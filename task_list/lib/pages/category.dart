@@ -20,27 +20,32 @@ class _DisplayCAtState extends State<DisplayCAt> {
   ];
 
   late PageController _pageController;
-  late Timer _timer;
-  int _currentPage = 0;
+late Timer _timer;
+int _currentPage = 0;
+bool _forwardDirection = true;
 
-  @override
-  void initState() {
-    super.initState();
-    _pageController = PageController(initialPage: 0);
-    _timer = Timer.periodic(const Duration(milliseconds: 1100), (Timer timer) {
-      if (_currentPage < listImages.length - 1) {
-        _currentPage++;
-      } else {
-        _currentPage = 0;
-      }
+@override
+void initState() {
+  super.initState();
 
-      _pageController.animateToPage(
-        _currentPage,
-        duration: const Duration(milliseconds: 700),
-        curve: Curves.easeIn,
-      );
-    });
-  }
+  _pageController = PageController(initialPage: 0);
+  _timer = Timer.periodic(const Duration(milliseconds: 1600), (Timer timer) {
+    if (_forwardDirection && _currentPage < listImages.length - 1) {
+      _currentPage++;
+    } else if (!_forwardDirection && _currentPage > 0) {
+      _currentPage--;
+    }
+     else {
+      _forwardDirection = !_forwardDirection;
+    }
+
+    _pageController.animateToPage(
+      _currentPage,
+      duration: const Duration(milliseconds: 700),
+      curve: Curves.ease,
+    );
+  });
+}
 
   @override
   void dispose() {
