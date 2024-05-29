@@ -1,5 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:task_list/data/data.dart';
 import 'package:task_list/pages/task.dart';

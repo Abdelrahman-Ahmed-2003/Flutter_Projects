@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:task_list/pages/calendar.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:task_list/cubits/cubit/data_cubit.dart';
 import 'package:task_list/pages/category.dart';
 import 'package:task_list/pages/display_tasks.dart';
 import 'package:task_list/pages/task.dart';
@@ -12,13 +13,16 @@ class MianPage extends StatefulWidget {
 }
 
 class _MianPageState extends State<MianPage> {
-  
   void _onpressedCalendar() {
     Navigator.pushNamed(context, '/calendar');
   }
 
-  
-
+  @override
+  void initState() {
+    var cubit = context.read<DataCubit>();
+    super.initState();
+    cubit.getValues();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,9 +52,9 @@ class _MianPageState extends State<MianPage> {
         elevation: 0.0,
         actions: [
           IconButton(
-  icon: const Icon(Icons.calendar_today),
-  onPressed: _onpressedCalendar,
-),
+            icon: const Icon(Icons.calendar_today),
+            onPressed: _onpressedCalendar,
+          ),
         ],
       ),
       body: Container(

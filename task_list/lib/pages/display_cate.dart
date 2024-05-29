@@ -3,9 +3,21 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_list/cubits/cubit/data_cubit.dart';
 import 'package:task_list/pages/display_tasks.dart';
 
-class Category extends StatelessWidget {
+class Category extends StatefulWidget {
   const Category({super.key});
 
+  @override
+  State<Category> createState() => _CategoryState();
+}
+
+class _CategoryState extends State<Category> {
+
+  @override
+  void initState() {
+    var cubit = context.read<DataCubit>();
+    super.initState();
+    cubit.getValues();
+  }
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<DataCubit, DataState>(
@@ -16,9 +28,8 @@ class Category extends StatelessWidget {
             onPopInvoked: (didPop) {
               if (didPop) {
                 cubit.changeSelCategory("");
-                Future.delayed(const Duration(milliseconds: 200), () {
                   cubit.getValues();
-                });
+                
               }
             },
             child: Scaffold(

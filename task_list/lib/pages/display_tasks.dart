@@ -12,16 +12,6 @@ class DisplayTask extends StatefulWidget {
 class _DisplayTaskState extends State<DisplayTask> {
 
 
-
-  @override
-  void initState() {
-    var cubit = context.read<DataCubit>();
-    super.initState();
-    cubit.getValues();
-  }
-
-
-
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<DataCubit, DataState>(
@@ -29,8 +19,6 @@ class _DisplayTaskState extends State<DisplayTask> {
       builder: (context, state) {
         var cubit = context.read<DataCubit>();
         List tasks = cubit.data;
-        
-        
 
         if (tasks.isEmpty) {
           return const Center(

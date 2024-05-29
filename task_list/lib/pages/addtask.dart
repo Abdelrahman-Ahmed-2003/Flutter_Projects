@@ -47,9 +47,10 @@ class _AddTaskState extends State<AddTask> {
                   if (add) {
                     cubit.addTask(widget.task);
                   } else {
-                    cubit.editTask(widget.index, widget.task);
+                    cubit.editTask(widget.index,widget.task);
                   }
                   //cubit.getValues();
+                  // ignore: use_build_context_synchronously
                   Navigator.of(context).pop();
                 }
               },

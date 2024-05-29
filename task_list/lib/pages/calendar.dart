@@ -15,6 +15,7 @@ class _CalendarState extends State<Calendar> {
   DateTime today = DateTime.now();
   void _onDaySelected(DateTime day, DateTime focus, cubit) {
     cubit.changeSelDate(day.toString().split(" ")[0]);
+    cubit.getValues();
     setState(() {
       today = day;
     });
@@ -23,14 +24,13 @@ class _CalendarState extends State<Calendar> {
   Color clor = const Color.fromARGB(255, 26, 29, 183);
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<DataCubit, DataState>(
-      listener: (context, state) {},
-      builder: (context, state) {
+    
         var cubit = context.watch<DataCubit>();
         return PopScope(
           onPopInvoked: (didPop) {
             if (didPop) {
               cubit.changeSelDate(DateTime.now().toString().split(" ")[0]);
+              cubit.getValues();
             }
           },
           child: Scaffold(
@@ -73,7 +73,6 @@ class _CalendarState extends State<Calendar> {
             ),
           ),
         );
-      },
-    );
+      
   }
 }
