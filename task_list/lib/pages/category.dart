@@ -1,73 +1,28 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:task_list/cubits/cubit/cubit_category.dart';
 import 'package:task_list/cubits/cubit/data_cubit.dart';
-import 'package:task_list/data/data.dart';
 
-class DisplayCAt extends StatefulWidget {
+class DisplayCAt extends StatelessWidget {
   const DisplayCAt({super.key});
 
   @override
-  State<DisplayCAt> createState() => _DisplayCAtState();
-}
-
-class _DisplayCAtState extends State<DisplayCAt> {
-  final listImages = [
-    "lib/images/work.jpg",
-    "lib/images/education.jpg",
-    "lib/images/entertament.jpg",
-    "lib/images/others.png"
-  ];
-
-  late PageController _pageController;
-late Timer _timer;
-int _currentPage = 0;
-bool _forwardDirection = true;
-
-@override
-void initState() {
-  super.initState();
-
-  _pageController = PageController(initialPage: 0);
-  _timer = Timer.periodic(const Duration(milliseconds: 1600), (Timer timer) {
-    if (_forwardDirection && _currentPage < listImages.length - 1) {
-      _currentPage++;
-    } else if (!_forwardDirection && _currentPage > 0) {
-      _currentPage--;
-    }
-     else {
-      _forwardDirection = !_forwardDirection;
-    }
-
-    _pageController.animateToPage(
-      _currentPage,
-      duration: const Duration(milliseconds: 700),
-      curve: Curves.ease,
-    );
-  });
-}
-
-  @override
-  void dispose() {
-    _timer.cancel();
-    _pageController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    var listCat = context.read<CategoryCubit>().categories;
     var cubit = context.read<DataCubit>();
     var screenWidth = MediaQuery.of(context).size.width;
+
     return Container(
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
         color: Colors.grey,
         borderRadius: BorderRadius.circular(15),
       ),
-      width: screenWidth * 0.7,
+      width: screenWidth * 0.9,
       height: 200,
-      child: PageView.builder(
-        controller: _pageController,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
         itemCount: listCat.length,
         itemBuilder: (BuildContext context, int index) {
           return GestureDetector(
@@ -75,40 +30,50 @@ void initState() {
               cubit.changeSelCategory(listCat[index]);
               Navigator.pushNamed(context, "/displaycate");
             },
-            child: Stack(
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(15),
-                  child: Image.asset(
-                    listImages[index],
-                    fit: BoxFit.cover,
-                    width: double.infinity,
-                    height: double.infinity,
-                    errorBuilder: (context, error, st) {
-                      return const Icon(Icons.error);
-                    },
-                  ),
+            child: Container(
+              margin: const EdgeInsets.symmetric(horizontal: 10),
+              width: 150, // Adjust this for your item width
+              /*decoration: BoxDecoration(
+                image: const DecorationImage(
+                  image: AssetImage("lib/images/work.jpg"),
+                  fit: BoxFit.cover,
                 ),
-                Positioned(
-                  bottom: 10,
-                  left: 0,
-                  right: 0,
-                  child: Container(
-                    color: Colors.black54,
-                    padding: const EdgeInsets.symmetric(vertical: 5),
-                    child: Center(
-                      child: Text(
-                        listCat[index],
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
-                          color: Colors.white,
+                borderRadius: BorderRadius.circular(15),
+                border: Border.all(color: Colors.black54, width: 1),
+              ),*/
+              child: Stack(
+                children: [
+                  Positioned.fill(
+                    child: Image.asset(
+                      "lib/images/photo.png",
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, st) {
+                        return const Icon(Icons.error);
+                      },
+                    ),
+                  ),
+                  Positioned(
+                    bottom: 50.0,
+                    left: 0,
+                    right: 0,
+                    child: Container(
+                      color: Colors.black54,
+                      padding: const EdgeInsets.symmetric(vertical: 5),
+                      child: Center(
+                        child: Text(
+                          listCat[index],
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                            color: Colors.white,
+                          ),
+                          textAlign: TextAlign.center,
                         ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           );
         },

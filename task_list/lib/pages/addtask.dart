@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:task_list/cubits/cubit/cubit_category.dart';
 import 'package:task_list/cubits/cubit/data_cubit.dart';
-import 'package:task_list/data/data.dart';
 
 import 'package:task_list/pages/task.dart';
 
@@ -22,6 +22,7 @@ class _AddTaskState extends State<AddTask> {
 
   @override
   Widget build(BuildContext context) {
+    var listCat = context.read<CategoryCubit>().listCat;
     return BlocConsumer<DataCubit, DataState>(
       listener: (context, state) {},
       builder: (context, state) {
