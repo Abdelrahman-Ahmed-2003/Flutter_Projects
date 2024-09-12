@@ -5,8 +5,7 @@ class DataState {}
 final class DataInitial extends DataState {}
 
 class DataLoaded extends DataState {
-  final List<dynamic> data;
-  DataLoaded(this.data);
+  DataLoaded();
 }
 
 
@@ -30,4 +29,8 @@ class DataRemove extends DataState {
 
 class ChangeSelDate extends DataState {
   ChangeSelDate();
+}
+
+class DataUpdate extends DataState {
+  DataUpdate();
 }

@@ -1,7 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:is_first_run/is_first_run.dart';
+import 'package:task_list/cubits/cubit/cubit_category.dart';
+import 'package:task_list/cubits/cubit/data_cubit.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -16,6 +19,9 @@ class _SplashScreenState extends State<SplashScreen> {
    @override
 void initState() {
   super.initState();
+  context.read<CategoryCubit>().getCategories();
+    context.read<DataCubit>().getTasks();
+    context.read<DataCubit>().getValues("date", DateTime.now().toString().split(" ")[0]);
   
 }
 

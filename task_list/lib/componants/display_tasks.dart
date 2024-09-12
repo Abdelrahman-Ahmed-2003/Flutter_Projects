@@ -2,15 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_list/cubits/cubit/data_cubit.dart';
 
-class DisplayTask extends StatefulWidget {
-  const DisplayTask({super.key});
 
-  @override
-  State<DisplayTask> createState() => _DisplayTaskState();
-}
+class DisplayTask extends StatelessWidget {
+  final String filterName;
+  final String filter;
+  const DisplayTask({
+    super.key,
+    required this.filterName,
+    required this.filter,
+  });
 
-class _DisplayTaskState extends State<DisplayTask> {
 
+  
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +21,8 @@ class _DisplayTaskState extends State<DisplayTask> {
       listener: (context, state) {},
       builder: (context, state) {
         var cubit = context.read<DataCubit>();
-        List tasks = cubit.data;
+    cubit.getValues(filterName, filter);
+        List tasks = cubit.listfilter;
 
         if (tasks.isEmpty) {
           return const Center(
@@ -42,10 +46,9 @@ class _DisplayTaskState extends State<DisplayTask> {
                           activeColor: Colors.green,
                           value: tasks[index].isDone ? true : false,
                           onChanged: (bool? value) {
-                            setState(() {
-                              tasks[index].isDone = value ??
-                                  false; // Update the isDone property of the task
-                            });
+                            cubit.updateTask(index, value);
+                               // Update the isDone property of the task
+                            
                           }, //tasks[index].isDone
                         ),
                         title: Text(

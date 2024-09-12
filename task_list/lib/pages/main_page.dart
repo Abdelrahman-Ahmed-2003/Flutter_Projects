@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:task_list/pages/category.dart';
-import 'package:task_list/pages/display_tasks.dart';
-import 'package:task_list/pages/task.dart';
+
+import 'package:task_list/componants/category.dart';
+import 'package:task_list/componants/display_tasks.dart';
+import 'package:task_list/tasks/task.dart';
+
+import '../componants/navigationbar.dart';
 
 
 class MianPage extends StatelessWidget {
@@ -10,22 +13,8 @@ class MianPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30),
-            side: const BorderSide(color: Colors.white)),
-        onPressed: () {
-          Navigator.pushNamed(
-            context,
-            "/addtask",
-            arguments: {
-              'task': Task(),
-              'index': -1,
-            },
-          );
-        },
-        child: const Icon(Icons.add),
-      ),
+      bottomNavigationBar: BottomNavigation(index: 0),
+      
       appBar: AppBar(
         backgroundColor: Colors.teal,
         title: const Align(
@@ -75,7 +64,7 @@ class MianPage extends StatelessWidget {
                   decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(15)),
-                  child: const DisplayTask()),
+                  child: DisplayTask(filterName:"date",filter:DateTime.now().toString().split(" ")[0] ,)),
             ),
           ],
         ),

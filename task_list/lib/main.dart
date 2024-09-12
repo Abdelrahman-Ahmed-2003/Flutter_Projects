@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:task_list/componants/custom_category.dart';
 import 'package:task_list/cubits/cubit/cubit_category.dart';
 import 'package:task_list/cubits/cubit/data_cubit.dart';
-import 'package:task_list/pages/addtask.dart';
-import 'package:task_list/pages/calendar.dart';
-import 'package:task_list/pages/display_cate.dart';
-import 'package:task_list/pages/first.dart';
+import 'package:task_list/pages/addtaskPage.dart';
+import 'package:task_list/pages/calendarPage.dart';
+import 'package:task_list/pages/display_catePage.dart';
+import 'package:task_list/pages/firstOpenPage.dart';
 import 'package:task_list/pages/main_page.dart';
-import 'package:task_list/pages/splash.dart';
-import 'package:task_list/pages/task.dart';
+import 'package:task_list/pages/splashPage.dart';
+import 'package:task_list/pages/updateCategoryPage.dart';
+import 'package:task_list/tasks/task.dart';
 
 // solve
 void main() async {
@@ -18,7 +20,7 @@ void main() async {
   await Hive.initFlutter();
   //await Hive.deleteBoxFromDisk('task_box');
   Hive.registerAdapter(TaskAdapter());
-  await Hive.openBox("task_box");
+  await Hive.openBox<Task>("task_box");
   await Hive.openBox("category_box");
   //Bloc.observer = MyBlocObserver();
   runApp( MultiBlocProvider(
@@ -59,7 +61,8 @@ class _MyWidgetState extends State<MyWidget> {
           );
         },
         '/displaycate': (context) => const Category(),
-        '/first': (context) =>  FirstOpen(),
+        '/first': (context) => FirstOpen(),
+        '/updatecate': (context) =>  UpdateCategory(),
       },
       debugShowCheckedModeBanner: false,
     );

@@ -1,68 +1,58 @@
 import 'package:bloc/bloc.dart';
 import 'package:hive/hive.dart';
-import 'package:task_list/data/data.dart';
-import 'package:task_list/pages/task.dart';
+import 'package:task_list/tasks/task.dart';
 
 part 'data_state.dart';
 
 class DataCubit extends Cubit<DataState> {
   DataCubit() : super(DataInitial());
-  var box = Hive.box("task_box");
-  List data = [];
+  final Box<Task>box = Hive.box<Task>("task_box");
+  List<Task> data = [];
+  List<Task> listfilter = [];
+  String category = "";
 
-  getValues() {
-    data = box.values.toList();
-    List tasks = [];
-    if (getcategory() != "") {
-          for (var element in data) {
-            if (element.category == getcategory()) {
-              tasks.add(element);
-            }
-          }
-        } else {
-          for (var element in data) {
-            if (element.date == getDate()) {
-              tasks.add(element);
-            }
-          }
-        }
-    data = tasks;
-    emit(DataLoaded(data));
+  getTasks() {
+    data = box.values.toList() ;
+  }
+
+  void getValues(String filterName, String filter) {
+    listfilter = [];
+    if (filterName != "") {
+      if (filterName == "category") {
+        category = filter;
+        listfilter =
+            data.where((element) => element.category == filter).toList();
+      } else if (filterName == "date") {
+        listfilter =
+            data.where((element) => element.date == filter).toList();
+      }
+    } else {
+      listfilter.addAll(data);
+    }
+    emit(DataLoaded());
   }
 
   addTask(Task task) async {
-    await box.add(task);
+    data.add(task);
     emit(DataAdded());
-    getValues();
+    await box.add(task);
   }
 
   editTask(int index, Task task) async {
-    await box.putAt(index, task);
+    data[index] = task;
     emit(TaskEdit());
-    getValues();
+    await box.putAt(index, task);
   }
 
   deleteTask(index) {
-    box.deleteAt(index);
+    data.removeAt(index);
     emit(DataRemove());
-    getValues();
+    box.deleteAt(index);
   }
 
-  changeSelDate(date) {
-    selectedDate = date;
-    emit(ChangeSelDate());
-  }
-
-  getDate() {
-    return selectedDate;
-  }
-
-  changeSelCategory(category) {
-    selectedCategory = category;
-    emit(ChangeSelCategory());
-  }
-
-  getcategory() {
-    return selectedCategory;
+  void updateTask(int index, bool? value) {
+    data[index].isDone = value ??false;
+    emit(DataUpdate());
+    box.putAt(index, data[index]);
   }
 }

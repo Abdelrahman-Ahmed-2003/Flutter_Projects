@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_list/cubits/cubit/cubit_category.dart';
@@ -27,7 +26,7 @@ class DisplayCAt extends StatelessWidget {
         itemBuilder: (BuildContext context, int index) {
           return GestureDetector(
             onTap: () {
-              cubit.changeSelCategory(listCat[index]);
+              cubit.category = listCat[index];
               Navigator.pushNamed(context, "/displaycate");
             },
             child: Container(

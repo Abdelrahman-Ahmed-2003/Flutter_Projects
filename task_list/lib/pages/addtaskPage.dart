@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:task_list/componants/navigationbar.dart';
 import 'package:task_list/cubits/cubit/cubit_category.dart';
 import 'package:task_list/cubits/cubit/data_cubit.dart';
 
-import 'package:task_list/pages/task.dart';
+import 'package:task_list/tasks/task.dart';
 
 // ignore: must_be_immutable
 class AddTask extends StatefulWidget {
@@ -22,7 +23,7 @@ class _AddTaskState extends State<AddTask> {
 
   @override
   Widget build(BuildContext context) {
-    var listCat = context.read<CategoryCubit>().listCat;
+    var listCat = context.read<CategoryCubit>().categories;
     return BlocConsumer<DataCubit, DataState>(
       listener: (context, state) {},
       builder: (context, state) {
@@ -37,29 +38,17 @@ class _AddTaskState extends State<AddTask> {
             }
           },
           child: Scaffold(
-            floatingActionButton: FloatingActionButton(
-              onPressed: () async{
-                if (formKey.currentState!.validate()) {
-                  if (FocusScope.of(context).hasFocus) {
-                    FocusScope.of(context).unfocus();
-                    await Future.delayed(const Duration(milliseconds: 100));
-                  }
-                  formKey.currentState!.save();
-                  if (add) {
-                    cubit.addTask(widget.task);
-                  } else {
-                    cubit.editTask(widget.index,widget.task);
-                  }
-                  //cubit.getValues();
-                  // ignore: use_build_context_synchronously
-                  Navigator.of(context).pop();
-                }
-              },
-              child: const Icon(Icons.check),
-            ),
+            bottomNavigationBar: BottomNavigation(index: 1),
+            
             appBar: AppBar(
               elevation: 0.0,
               backgroundColor: Colors.teal,
+              /*leading: IconButton(
+                icon: const Icon(Icons.arrow_back),
+                onPressed: () {
+                  Navigator.of(context).pushReplacementNamed('/MainPage');
+                },
+              ),*/
               title: Center(
                 child: add ? const Text("Add Task") : const Text("Edit Task"),
               ),
@@ -110,14 +99,14 @@ class _AddTaskState extends State<AddTask> {
                             children: [
                               Text(
                                 "Date",
-                                style:
-                                    TextStyle(fontSize: 20, color: Colors.white),
+                                style: TextStyle(
+                                    fontSize: 20, color: Colors.white),
                               ),
                               Spacer(),
                               Text(
                                 "Time",
-                                style:
-                                    TextStyle(fontSize: 20, color: Colors.white),
+                                style: TextStyle(
+                                    fontSize: 20, color: Colors.white),
                               ),
                             ],
                           ),
@@ -196,7 +185,8 @@ class _AddTaskState extends State<AddTask> {
                                         ),
                                         onPressed: () {
                                           setState(() {
-                                            widget.task.category = listCat[index];
+                                            widget.task.category =
+                                                listCat[index];
                                           });
                                         },
                                       );
@@ -212,6 +202,29 @@ class _AddTaskState extends State<AddTask> {
                               ),
                             ],
                           ),
+                          ElevatedButton(onPressed: () async {
+                if (formKey.currentState!.validate()) {
+                  if (FocusScope.of(context).hasFocus) {
+                    FocusScope.of(context).unfocus();
+                    //await Future.delayed(const Duration(milliseconds: 100));
+                  }
+                  formKey.currentState!.save();
+                  if (add) {
+                    cubit.addTask(widget.task);
+                  } else {
+                    cubit.editTask(widget.index, widget.task);
+                  }
+                  //cubit.getValues();
+                  // ignore: use_build_context_synchronously
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Task added successfully'),
+                    ),
+                  );
+                  
+                  //Navigator.of(context).pushReplacementNamed("/MainPage");
+                }
+              }, child: Text("add task"))
                         ],
                       ),
                       const SizedBox(

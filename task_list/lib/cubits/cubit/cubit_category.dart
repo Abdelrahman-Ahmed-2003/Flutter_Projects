@@ -7,41 +7,43 @@ class CategoryCubit extends Cubit<CategoryState> {
 
   final Box box = Hive.box("category_box"); // Add type annotation
   List<String> categories = []; // Add type annotation
-  List listCat = [
+  List<String> listCat = [
     "Work",
     "Personal",
     "Home",
     "Health",
     "Finance",
     "Education",
-    "Entertament",
+    "Entertainment",
     "Shopping"
   ];
 
   void getCategories() {
     categories = box.values.cast<String>().toList(); // Ensure type casting
-    emit(CategoryLoaded(categories));
+    emit(CategoryLoaded());
   }
 
   Future<void> addCategory(String category) async {
     try {
       categories.add(category);
-      emit(CategoryLoaded(categories));
+      await box.add(category); // Save to Hive box
+      emit(CategoryLoaded());
     } catch (e) {
       emit(CategoryError(e.toString())); // Emit an error state if needed
     }
   }
 
-  void removeCategory(int index) {
-    categories.remove(listCat[index]);
-    emit(CategoryLoaded(categories));
+  Future<void> removeCategory(int index) async {
+    try {
+      categories.remove(listCat[index]);
+      await box.deleteAt(index); // Remove from Hive box
+      emit(CategoryLoaded());
+    } catch (e) {
+      emit(CategoryError(e.toString())); // Emit an error state if needed
+    }
   }
 
-  closeApp() async {
-    await Hive.deleteBoxFromDisk("category_box");
-    for (var element in categories) {
-      await box.add(element);
-    }
-    Hive.close();
+  Future<void> closeApp() async {
+    await Hive.close();
   }
 }
